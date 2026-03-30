@@ -288,6 +288,7 @@ def stage1(T_data, omega_data, s0=S0, z_tau=Z_TAU):
         return discrete_frechet(T_region_1L, T_mod)
 
     res = differential_evolution(cv1_objective, bounds=[(1.5e6, 5e6)],
+                                 strategy='rand1bin',
                                  maxiter=500, tol=1e-8, seed=42)
     CV1 = res.x[0]
 
@@ -338,6 +339,7 @@ def adaptive_sweep(T_data, omega_data, loss_fn_maker, bounds,
         # Warm-start: seed DE with previous step's best solution
         x0 = prev_x if prev_x is not None else None
         res = differential_evolution(loss_fn, bounds,
+                                     strategy='rand1bin',
                                      popsize=de_popsize, tol=de_tol,
                                      maxiter=DE_MAXITER, x0=x0)
         prev_x = res.x.copy()
@@ -429,6 +431,7 @@ def invert_case(T_data, depth_data,
                          k1=k1, CV1=CV1, L1=L1, k2=k2, CV2=CV2)
 
     res3 = differential_evolution(loss_fn_3L, bounds=bounds_stage3,
+                                  strategy='rand1bin',
                                   popsize=DE_POPSIZE, tol=DE_TOL,
                                   maxiter=DE_MAXITER,
                                   mutation=DE_F, recombination=DE_CR,
